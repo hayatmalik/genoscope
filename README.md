@@ -38,13 +38,13 @@ schema (`npm run gen:api`).
 
 ## Model
 
-Trained on the BERTax dataset with a test set of **genera never seen in training**: **0.79 macro F1** per 1,500 bp
+Trained on the BERTax dataset with a test set of **genera never seen in training**: **0.80 macro F1** per 1,500 bp
 fragment. Details, data provenance and limitations: [ml/MODEL_CARD.md](ml/MODEL_CARD.md).
 
 Retrain:
 
 ```bash
-uv run --group ml python ml/download_data.py   # ~180 MB download (BERTax subset + NCBI taxonomy), ~1 GB on disk
+uv run --group ml python ml/download_data.py   # ~290 MB download (BERTax subset + NCBI taxonomy), ~1.3 GB on disk
 uv run --group ml python ml/prepare_data.py    # labels, balances, writes Parquet + example FASTA
 uv run --group ml python ml/train.py           # model selection (~10 min), evaluation, writes ml/models/
 ```

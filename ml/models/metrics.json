@@ -1,46 +1,46 @@
 {
   "cv_macro_f1": {
-    "LogisticRegression": 0.7491,
-    "RandomForestClassifier": 0.7721,
-    "HistGradientBoostingClassifier": 0.8183
+    "LogisticRegression": 0.7511,
+    "RandomForestClassifier": 0.7741,
+    "HistGradientBoostingClassifier": 0.8214
   },
   "selected_model": "HistGradientBoostingClassifier",
   "test": {
     "Archaea": {
-      "precision": 0.7871389270976616,
-      "recall": 0.9156,
-      "f1-score": 0.8465236686390533,
+      "precision": 0.7930555555555555,
+      "recall": 0.9136,
+      "f1-score": 0.8490706319702602,
       "support": 5000.0
     },
     "Bacteria": {
-      "precision": 0.7842978551193849,
-      "recall": 0.7752,
-      "f1-score": 0.7797223898611949,
+      "precision": 0.7960728165268971,
+      "recall": 0.7784,
+      "f1-score": 0.7871372231772676,
       "support": 5000.0
     },
     "Eukaryota": {
-      "precision": 0.812771503040834,
-      "recall": 0.7484,
-      "f1-score": 0.7792586422324032,
+      "precision": 0.8293933987511151,
+      "recall": 0.7438,
+      "f1-score": 0.7842682412484184,
       "support": 5000.0
     },
     "Viruses": {
-      "precision": 0.7692971108236308,
-      "recall": 0.7136,
-      "f1-score": 0.740402573147956,
+      "precision": 0.777891925210602,
+      "recall": 0.7572,
+      "f1-score": 0.7674065065369413,
       "support": 5000.0
     },
-    "accuracy": 0.7882,
+    "accuracy": 0.79825,
     "macro avg": {
-      "precision": 0.7883763490203779,
-      "recall": 0.7881999999999999,
-      "f1-score": 0.7864768184701518,
+      "precision": 0.7991034240110424,
+      "recall": 0.79825,
+      "f1-score": 0.7969706507332219,
       "support": 20000.0
     },
     "weighted avg": {
-      "precision": 0.7883763490203779,
-      "recall": 0.7882,
-      "f1-score": 0.7864768184701518,
+      "precision": 0.7991034240110424,
+      "recall": 0.79825,
+      "f1-score": 0.7969706507332219,
       "support": 20000.0
     }
   }
