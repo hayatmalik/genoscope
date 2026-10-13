@@ -14,7 +14,7 @@ DATA = Path(__file__).parent / "data"
 RAW, TAXDUMP = DATA / "raw", DATA / "taxdump"
 BERTAX_ZIP = "https://osf.io/download/shcmd/"  # non_similar_dataset.zip
 TAXDUMP_URL = "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz"
-TRAIN_BYTES = 600_000_000  # ~400k fragments
+TRAIN_BYTES = 240_000_000  # ~158k fragments; the size the shipped model was trained on
 CHUNK = 8_000_000
 
 

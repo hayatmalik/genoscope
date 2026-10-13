@@ -1,5 +1,7 @@
 # GenoScope
 
+[![CI](https://github.com/hayatmalik/genoscope/actions/workflows/ci.yml/badge.svg)](https://github.com/hayatmalik/genoscope/actions/workflows/ci.yml)
+
 Upload a DNA FASTA file and get its composition, a sliding-window GC profile, its 4-mer profile and a machine-learning
 prediction of its origin superkingdom (Archaea, Bacteria, Eukaryota, Viruses).
 
@@ -42,11 +44,12 @@ fragment. Details, data provenance and limitations: [ml/MODEL_CARD.md](ml/MODEL_
 Retrain:
 
 ```bash
-uv sync --group ml
-uv run python ml/download_data.py   # streams ~300 MB from OSF + NCBI taxonomy
-uv run python ml/prepare_data.py    # labels, balances, writes Parquet + example FASTA
-uv run python ml/train.py           # model selection, evaluation, writes ml/models/
+uv run --group ml python ml/download_data.py   # ~180 MB download (BERTax subset + NCBI taxonomy), ~1 GB on disk
+uv run --group ml python ml/prepare_data.py    # labels, balances, writes Parquet + example FASTA
+uv run --group ml python ml/train.py           # model selection (~10 min), evaluation, writes ml/models/
 ```
+
+The raw files in `ml/data/` can be deleted after `prepare_data.py`; training only needs the Parquet files.
 
 ## Project layout
 
@@ -60,6 +63,6 @@ frontend/src/    api/ (client + generated types) · components/ · pages/
 ## Tests
 
 ```bash
-uv run pytest && uv run ruff check .
+uv run pytest && uv run ruff check . && uv run ruff format --check .
 cd frontend && npm run lint && npm run build
 ```
