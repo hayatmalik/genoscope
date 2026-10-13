@@ -81,6 +81,8 @@ export interface components {
             id: string;
             /** Description */
             description: string;
+            /** Sequence */
+            sequence: string;
             /** Length */
             length: number;
             /** Gc Content */

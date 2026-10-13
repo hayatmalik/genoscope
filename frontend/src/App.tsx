@@ -1,6 +1,6 @@
 import { Alert, Layout, Spin, Typography } from 'antd'
 import { useState } from 'react'
-import { errorMessage, useAnalyze } from './api/client'
+import { type AnalyzeResponse, errorMessage, useAnalyze } from './api/client'
 import ResultsPage from './pages/ResultsPage'
 import UploadPage from './pages/UploadPage'
 
@@ -8,11 +8,19 @@ export default function App() {
   const analyze = useAnalyze()
   const [file, setFile] = useState<Blob>()
   const [window, setWindow] = useState(500)
+  // Last successful result stays on screen while a re-analysis (e.g. new GC window) runs,
+  // so the results page doesn't unmount and lose the selected record.
+  const [result, setResult] = useState<AnalyzeResponse>()
 
   const run = (f: Blob, w: number) => {
     setFile(f)
     setWindow(w)
-    analyze.mutate({ file: f, window: w })
+    analyze.mutate({ file: f, window: w }, { onSuccess: setResult })
+  }
+
+  const reset = () => {
+    analyze.reset()
+    setResult(undefined)
   }
 
   return (
@@ -26,9 +34,8 @@ export default function App() {
                  style={{ maxWidth: 720, margin: '0 auto 16px' }} />
         )}
         <Spin spinning={analyze.isPending}>
-          {analyze.data && file ? (
-            <ResultsPage result={analyze.data} window={window} onWindowChange={(w) => run(file, w)}
-                         onReset={analyze.reset} />
+          {result && file ? (
+            <ResultsPage result={result} window={window} onWindowChange={(w) => run(file, w)} onReset={reset} />
           ) : (
             <UploadPage loading={analyze.isPending} onSubmit={(f) => run(f, window)} />
           )}

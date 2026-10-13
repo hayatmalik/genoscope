@@ -4,7 +4,12 @@ import type { RecordResult } from '../api/client'
 export default function SummaryCard({ record }: { record: RecordResult }) {
   const { prediction } = record
   return (
-    <Card title="Summary" style={{ marginBottom: 16 }}>
+    <Card title="Summary" style={{ height: '100%' }}>
+      <Descriptions column={1} size="small" style={{ marginBottom: 16 }}
+                    items={[
+                      { label: 'ID', children: record.id },
+                      { label: 'Description', children: record.description },
+                    ]} />
       <Statistic title="Length" value={record.length} suffix="bp" />
       <Statistic title="GC content" value={record.gc_content * 100} precision={2} suffix="%" style={{ marginTop: 16 }} />
       {prediction && (
@@ -16,13 +21,6 @@ export default function SummaryCard({ record }: { record: RecordResult }) {
         />
       )}
       {record.warning && <Alert type="warning" title={record.warning} style={{ marginTop: 16 }} />}
-      <Descriptions title="Base counts" column={2} size="small" style={{ marginTop: 24 }}>
-        {Object.entries(record.base_counts).map(([base, count]) => (
-          <Descriptions.Item key={base} label={base}>
-            {count.toLocaleString()}
-          </Descriptions.Item>
-        ))}
-      </Descriptions>
     </Card>
   )
 }

@@ -13,6 +13,8 @@
   "dependencies": {
     "@ant-design/icons": "^6.3.4",
     "@ant-design/plots": "^2.6.8",
+    "@rc-component/resize-observer": "^1.1.2",
+    "@rc-component/virtual-list": "^1.5.2",
     "@tanstack/react-query": "^5.104.2",
     "antd": "^6.6.6",
     "axios": "^1.20.0",

@@ -15,6 +15,7 @@ class Prediction(BaseModel):
 class RecordResult(BaseModel):
     id: str
     description: str
+    sequence: str
     length: int
     gc_content: float
     base_counts: dict[str, int]

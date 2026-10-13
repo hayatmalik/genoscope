@@ -41,7 +41,8 @@ def test_too_large():
 
 
 def test_short_sequence_has_stats_but_no_prediction():
-    record = post(">short\nGGCCAATT\n").json()["records"][0]
+    record = post(">short\nggcc\nAATT\n").json()["records"][0]
+    assert record["sequence"] == "GGCCAATT"  # wrapped lines joined, uppercased
     assert record["length"] == 8
     assert record["gc_content"] == 0.5
     assert record["base_counts"] == {"G": 2, "C": 2, "A": 2, "T": 2}

@@ -53,6 +53,7 @@ def analyze_record(record: SeqRecord, window: int) -> RecordResult:
     return RecordResult(
         id=record.id,
         description=record.description,
+        sequence=seq,
         length=len(seq),
         gc_content=round(gc_fraction(seq, ambiguous="ignore"), 4),
         base_counts=dict(Counter(seq).most_common()),

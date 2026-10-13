@@ -3,7 +3,8 @@
 [![CI](https://github.com/hayatmalik/genoscope/actions/workflows/ci.yml/badge.svg)](https://github.com/hayatmalik/genoscope/actions/workflows/ci.yml)
 
 Upload a DNA FASTA file and get its composition, a sliding-window GC profile, its 4-mer profile and a machine-learning
-prediction of its origin superkingdom (Archaea, Bacteria, Eukaryota, Viruses).
+prediction of its origin superkingdom (Archaea, Bacteria, Eukaryota, Viruses). A sortable table lists every record
+(e.g. each contig of an assembly); clicking one opens its detail view with a colour-coded sequence viewer.
 
 **Stack:** FastAPI · Biopython · pandas · scikit-learn · React · Ant Design · @ant-design/plots · TanStack Query · Docker
 
