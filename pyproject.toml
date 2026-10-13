@@ -1,0 +1,37 @@
+[project]
+name = "genoscope"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "biopython>=1.88",
+    "fastapi>=0.143.0",
+    "joblib>=1.6.0",
+    "pandas>=3.0.6",
+    "python-multipart>=0.0.32",
+    "scikit-learn>=1.9.1",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
+ml = [
+    "matplotlib>=3.11.2",
+    "pyarrow>=26.0.0",
+    "remotezip>=0.12.6",
+    "requests>=2.34.2",
+    "taxopy>=0.14.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["backend"]
+testpaths = ["backend/tests"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
