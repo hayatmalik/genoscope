@@ -1,9 +1,10 @@
 import ResizeObserver from '@rc-component/resize-observer'
 import VirtualList from '@rc-component/virtual-list'
 import { Space } from 'antd'
-import { useMemo, useState } from 'react'
+import { type CSSProperties, useMemo, useState } from 'react'
 import type { RecordResult } from '../api/client'
 import { BASE_COLORS, baseColor } from '../bases'
+import { DARK_PURPLE } from '../theme'
 import BaseBadge from './BaseBadge'
 import ChartCard from './ChartCard'
 import './SequenceViewer.css'
@@ -41,10 +42,10 @@ export default function SequenceViewer({ record }: { record: RecordResult }) {
   return (
     <ChartCard
       title="Sequence"
-      extra={<Space size={12}>{Object.keys(BASE_COLORS).map((b) => <BaseBadge key={b} base={b} />)}</Space>}
+      extra={<Space size={12}>{Object.keys(BASE_COLORS).map((b) => <BaseBadge key={b} base={b} textColor="#fff" />)}</Space>}
     >
       <ResizeObserver onResize={(size) => setPerRow(basesPerRow(size.width))}>
-        <div className="seq-scroll">
+        <div className="seq-scroll" style={{ '--seq-text': DARK_PURPLE } as CSSProperties}>
           <VirtualList data={rows} height={286} itemHeight={ROW_HEIGHT} itemKey={(r) => r}>
             {(r) => <SequenceRow start={r * perRow} bases={sequence.slice(r * perRow, (r + 1) * perRow)} />}
           </VirtualList>

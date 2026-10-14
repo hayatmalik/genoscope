@@ -1,9 +1,11 @@
 import { Pie } from '@ant-design/plots'
-import { Descriptions, Typography } from 'antd'
+import { Descriptions } from 'antd'
 import type { RecordResult } from '../api/client'
 import { BASE_COLORS, baseColor } from '../bases'
+import { DARK_PURPLE } from '../theme'
 import BaseBadge from './BaseBadge'
 import ChartCard from './ChartCard'
+import ValueTag from './ValueTag'
 
 const pct = (n: number, total: number) => `${((n / total) * 100).toFixed(1)}%`
 
@@ -29,12 +31,14 @@ export default function BaseCompositionCard({ record }: { record: RecordResult }
       <Descriptions column={2} size="small"
                     items={data.map((d) => ({
                       key: d.base,
-                      label: <BaseBadge base={d.base} />,
+                      label: <BaseBadge base={d.base} textColor={DARK_PURPLE} />,
                       children: `${d.count.toLocaleString()} (${pct(d.count, record.length)})`,
                     }))} />
-      <Typography.Paragraph style={{ marginTop: 16, marginBottom: 0 }}>
-        AT {pct(count('A') + count('T'), record.length)} · GC {pct(count('G') + count('C'), record.length)}
-      </Typography.Paragraph>
+      <Descriptions column={2} size="small" style={{ marginTop: 12 }}
+                    items={[
+                      { key: 'AT', label: 'AT', children: <ValueTag>{pct(count('A') + count('T'), record.length)}</ValueTag> },
+                      { key: 'GC', label: 'GC', children: <ValueTag>{pct(count('G') + count('C'), record.length)}</ValueTag> },
+                    ]} />
     </ChartCard>
   )
 }

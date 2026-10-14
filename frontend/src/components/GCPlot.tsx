@@ -1,6 +1,7 @@
 import { Line } from '@ant-design/plots'
 import { InputNumber, Space } from 'antd'
 import type { RecordResult } from '../api/client'
+import { PURPLE } from '../theme'
 import ChartCard from './ChartCard'
 
 interface Props {
@@ -29,6 +30,7 @@ export default function GCPlot({ record, window, onWindowChange }: Props) {
         height={300}
         axis={{ x: { title: 'Position (bp)' }, y: { title: 'GC fraction' } }}
         scale={{ y: { domain: [0, 1] } }}
+        style={{ stroke: PURPLE, lineWidth: 1.5 }}
         slider={{ x: {} }}
       />
     </ChartCard>

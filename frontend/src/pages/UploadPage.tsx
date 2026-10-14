@@ -15,7 +15,7 @@ export default function UploadPage({ loading, onSubmit }: Props) {
     <Card style={{ maxWidth: 720, margin: '48px auto' }}>
       <Typography.Title level={3}>Analyze a DNA sequence</Typography.Title>
       <Typography.Paragraph type="secondary">
-        Upload a FASTA file to get its composition, GC profile, k-mer profile and a predicted origin
+        Upload a FASTA file to get its composition, GC profile, open reading frames and a predicted origin
         (Archaea, Bacteria, Eukaryota or Viruses).
       </Typography.Paragraph>
       <Tabs

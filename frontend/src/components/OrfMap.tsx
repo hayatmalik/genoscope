@@ -1,10 +1,10 @@
 import { Bar } from '@ant-design/plots'
 import { Col, Empty, Row, Statistic } from 'antd'
 import type { RecordResult } from '../api/client'
+import { STRAND_COLORS } from '../theme'
 import ChartCard from './ChartCard'
 
 const FRAMES = ['+1', '+2', '+3', '-1', '-2', '-3']
-const STRAND_COLORS = { Forward: '#6f95ba', Reverse: '#c48f6a' }
 const MIN_ORF_LEN = 300 // must match MIN_ORF_LEN in backend/app/analysis.py
 
 export default function OrfMap({ record }: { record: RecordResult }) {
@@ -20,12 +20,12 @@ export default function OrfMap({ record }: { record: RecordResult }) {
   return (
     <ChartCard title="Open reading frames (six-frame map)">
       <Row gutter={16} style={{ marginBottom: 8 }}>
-        <Col span={8}><Statistic title={`ORFs ≥ ${MIN_ORF_LEN} bp`} value={orfs.length} /></Col>
+        <Col span={8}><Statistic title={`ORFs ≥ ${MIN_ORF_LEN} bp:`} value={orfs.length} /></Col>
         <Col span={8}>
-          <Statistic title="Longest ORF" value={longest} suffix={`bp · ${Math.max(0, (longest - 3) / 3)} aa`} />
+          <Statistic title="Longest ORF:" value={longest} suffix={`bp · ${Math.max(0, (longest - 3) / 3)} aa`} />
         </Col>
         <Col span={8}>
-          <Statistic title="Coding density" value={record.coding_density * 100} precision={1} suffix="%" />
+          <Statistic title="Coding density:" value={record.coding_density * 100} precision={1} suffix="%" />
         </Col>
       </Row>
       {orfs.length === 0 ? (

@@ -10,7 +10,7 @@ interface Props {
 
 export default function ChartCard({ title, extra, empty, children }: Props) {
   return (
-    <Card title={title} extra={extra} style={{ height: '100%' }}>
+    <Card title={title} extra={extra} style={{ height: '100%' }} styles={{ extra: { color: '#fff' } }}>
       {empty ? <Empty description="Not enough sequence for this view" /> : children}
     </Card>
   )

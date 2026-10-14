@@ -1,6 +1,7 @@
-import { Card, Table, Tag, Typography } from 'antd'
+import { Badge, Card, Table, Typography } from 'antd'
 import type { TableProps } from 'antd'
 import type { RecordResult } from '../api/client'
+import { CLASS_COLORS } from '../theme'
 
 type Row = RecordResult & { key: number }
 
@@ -30,8 +31,8 @@ const columns: TableProps<Row>['columns'] = [
     render: (_, r) =>
       r.prediction ? (
         <>
-          <Tag color="blue">{r.prediction.label}</Tag>
-          <Typography.Text type="secondary">
+          <Badge color={CLASS_COLORS[r.prediction.label]} text={r.prediction.label} />
+          <Typography.Text type="secondary" style={{ marginLeft: 8 }}>
             {(r.prediction.probabilities[r.prediction.label] * 100).toFixed(1)}%
           </Typography.Text>
         </>

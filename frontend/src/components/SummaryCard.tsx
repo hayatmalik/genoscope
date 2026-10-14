@@ -1,5 +1,6 @@
-import { Alert, Card, Descriptions, Statistic, Tag } from 'antd'
+import { Alert, Card, Descriptions, Statistic } from 'antd'
 import type { RecordResult } from '../api/client'
+import ValueTag from './ValueTag'
 
 export default function SummaryCard({ record }: { record: RecordResult }) {
   const { prediction } = record
@@ -10,13 +11,13 @@ export default function SummaryCard({ record }: { record: RecordResult }) {
                       { label: 'ID', children: record.id },
                       { label: 'Description', children: record.description },
                     ]} />
-      <Statistic title="Length" value={record.length} suffix="bp" />
-      <Statistic title="GC content" value={record.gc_content * 100} precision={2} suffix="%" style={{ marginTop: 16 }} />
+      <Statistic title="Length:" value={record.length} suffix="bp" />
+      <Statistic title="GC content:" value={record.gc_content * 100} precision={2} suffix="%" style={{ marginTop: 16 }} />
       {prediction && (
         <Statistic
-          title={`Predicted origin (${prediction.windows} windows)`}
+          title={`Predicted origin (${prediction.windows} windows):`}
           value={prediction.label}
-          suffix={<Tag color="blue">{(prediction.probabilities[prediction.label] * 100).toFixed(1)}%</Tag>}
+          suffix={<ValueTag>{(prediction.probabilities[prediction.label] * 100).toFixed(1)}%</ValueTag>}
           style={{ marginTop: 16 }}
         />
       )}
