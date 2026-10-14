@@ -26,6 +26,8 @@ cd frontend && npm install && npm run dev                    # UI on :5173 (prox
 ```
 
 Click **Try an example** on the start page to analyse one held-out sequence per superkingdom.
+[test_sequences/](test_sequences/) contains NCBI reference sequences for manual testing (one virus, bacterium,
+archaeon and eukaryote each, plus a mixed multi-record file and an empty file).
 
 ## How it works
 
