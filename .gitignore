@@ -8,3 +8,4 @@ frontend/dist/
 .claude/settings.local.json
 .mcp.json
 .DS_Store
+PLAN.md
