@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from app.analysis import gc_windows
+from app.analysis import MAX_GC_POINTS, gc_windows
 from app.main import app
 from fastapi.testclient import TestClient
 
@@ -20,6 +20,17 @@ def test_health():
 def test_gc_windows():
     points = gc_windows("GGGGAAAA", window=4)
     assert [p.gc for p in points] == [1.0, 0.75, 0.5, 0.25, 0.0]
+    assert [p.position for p in points] == [2, 3, 4, 5, 6]  # window centres (bases 1-4 → 2), 1-based
+
+
+def test_gc_windows_long_sequence_averages_instead_of_skipping():
+    # 100 kb of A with a 20 bp G spike placed between the points that plain every-n-th sampling
+    # would keep; averaging blocks of windows must still show it
+    seq = "A" * 50_020 + "G" * 20 + "A" * 49_960
+    points = gc_windows(seq, window=10)
+    assert len(points) <= MAX_GC_POINTS
+    assert max(p.gc for p in points) > 0  # the narrow spike is still visible, not skipped
+    assert points[0].position < 100 and points[-1].position > 99_900  # whole sequence covered
 
 
 @pytest.mark.parametrize(

@@ -8,21 +8,22 @@ import BaseBadge from './BaseBadge'
 import ChartCard from './ChartCard'
 import './SequenceViewer.css'
 
-const PER_ROW = 40
-const GROUP = 10
+const MAX_PER_ROW = 50
 const ROW_HEIGHT = 22
-// position label + tiles + group gaps + scrollbar room (must match SequenceViewer.css)
-const ROW_WIDTH = 64 + PER_ROW * 15 + (PER_ROW / GROUP - 1) * 6 + 12
+// Must match SequenceViewer.css: position label + scrollbar room, and tile width + margin.
+const ROW_PADDING = 64 + 12
+const TILE_WIDTH = 15
+
+/** Largest multiple of 10 bases (10–50) that fits the available width, so rows never overflow. */
+const basesPerRow = (width: number) =>
+  Math.min(MAX_PER_ROW, Math.max(10, Math.floor((width - ROW_PADDING) / TILE_WIDTH / 10) * 10))
 
 function SequenceRow({ start, bases }: { start: number; bases: string }) {
   return (
     <div className="seq-row">
       <span className="seq-pos">{(start + 1).toLocaleString()}</span>
       {[...bases].map((b, i) => (
-        <span key={i} className={i % GROUP === 0 && i > 0 ? 'seq-base seq-gap' : 'seq-base'}
-              style={{ background: baseColor(b) }}>
-          {b}
-        </span>
+        <span key={i} className="seq-base" style={{ background: baseColor(b) }}>{b}</span>
       ))}
     </div>
   )
@@ -30,21 +31,22 @@ function SequenceRow({ start, bases }: { start: number; bases: string }) {
 
 export default function SequenceViewer({ record }: { record: RecordResult }) {
   const { sequence } = record
-  const [width, setWidth] = useState(ROW_WIDTH)
+  const [perRow, setPerRow] = useState(MAX_PER_ROW)
   // Only the visible rows are rendered, so multi-megabase sequences scroll smoothly.
-  const rows = useMemo(() => Array.from({ length: Math.ceil(sequence.length / PER_ROW) }, (_, i) => i), [sequence])
+  const rows = useMemo(
+    () => Array.from({ length: Math.ceil(sequence.length / perRow) }, (_, i) => i),
+    [sequence, perRow],
+  )
 
   return (
     <ChartCard
       title="Sequence"
       extra={<Space size={12}>{Object.keys(BASE_COLORS).map((b) => <BaseBadge key={b} base={b} />)}</Space>}
     >
-      <ResizeObserver onResize={(size) => setWidth(size.width)}>
+      <ResizeObserver onResize={(size) => setPerRow(basesPerRow(size.width))}>
         <div className="seq-scroll">
-          {/* horizontal scrolling only when the card is narrower than a row (phones) */}
-          <VirtualList data={rows} height={286} itemHeight={ROW_HEIGHT} itemKey={(r) => r}
-                       scrollWidth={width < ROW_WIDTH ? ROW_WIDTH : undefined}>
-            {(r) => <SequenceRow start={r * PER_ROW} bases={sequence.slice(r * PER_ROW, (r + 1) * PER_ROW)} />}
+          <VirtualList data={rows} height={286} itemHeight={ROW_HEIGHT} itemKey={(r) => r}>
+            {(r) => <SequenceRow start={r * perRow} bases={sequence.slice(r * perRow, (r + 1) * perRow)} />}
           </VirtualList>
         </div>
       </ResizeObserver>

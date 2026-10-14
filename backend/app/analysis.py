@@ -24,8 +24,13 @@ def model() -> Pipeline:
 
 def gc_windows(seq: str, window: int) -> list[GCPoint]:
     gc = pd.Series(list(seq)).isin(["G", "C"]).rolling(window).mean().dropna()
-    gc = gc.iloc[:: max(1, -(-len(gc) // MAX_GC_POINTS))]  # ceil division
-    return [GCPoint(position=i - window // 2 + 1, gc=round(v, 4)) for i, v in gc.items()]
+    # one row per window, labelled by the window's centre (1-based)
+    df = pd.DataFrame({"position": gc.index - window // 2 + 1, "gc": gc.to_numpy()})
+    # Long sequences: average each block of consecutive windows into one point, so every window
+    # (and therefore every base) contributes to the ≤ MAX_GC_POINTS points sent to the chart.
+    step = max(1, -(-len(df) // MAX_GC_POINTS))  # ceil division
+    df = df.groupby(df.index // step).mean()
+    return [GCPoint(position=round(p), gc=round(g, 4)) for p, g in df.itertuples(index=False)]
 
 
 def predict(seq: str) -> Prediction | None:

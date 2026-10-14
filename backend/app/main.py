@@ -19,7 +19,7 @@ def health() -> dict[str, str]:
 
 
 @app.post("/api/analyze")
-async def analyze(file: UploadFile, window: int = Query(500, ge=10, le=10_000)) -> AnalyzeResponse:
+async def analyze(file: UploadFile, window: int = Query(150, ge=10, le=10_000)) -> AnalyzeResponse:
     content = await file.read(MAX_BYTES + 1)
     if len(content) > MAX_BYTES:
         raise HTTPException(413, f"File larger than {MAX_BYTES // 1_000_000} MB.")

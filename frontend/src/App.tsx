@@ -7,7 +7,7 @@ import UploadPage from './pages/UploadPage'
 export default function App() {
   const analyze = useAnalyze()
   const [file, setFile] = useState<Blob>()
-  const [window, setWindow] = useState(500)
+  const [window, setWindow] = useState(150)
   // Last successful result stays on screen while a re-analysis (e.g. new GC window) runs,
   // so the results page doesn't unmount and lose the selected record.
   const [result, setResult] = useState<AnalyzeResponse>()
