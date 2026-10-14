@@ -46,4 +46,4 @@ mimic their hosts' composition.
 - Trained on nuclear/genomic fragments; plasmids, organelles and synthetic constructs are out of scope.
 - Inputs shorter than 1,000 bp get no prediction; confidence on single windows is modest.
 - For comparison, BERTax (a transformer) reports higher accuracy on this task; this model trades accuracy for
-  being tiny (< 1 MB), fast on CPU and explainable via the k-mer profile.
+  being tiny (< 1 MB), fast on CPU and built on interpretable 4-mer frequency features.

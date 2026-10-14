@@ -1,8 +1,9 @@
 from pathlib import Path
 
 import pytest
-from app.analysis import MAX_GC_POINTS, gc_windows
+from app.analysis import MAX_GC_POINTS, find_orfs, gc_windows
 from app.main import app
+from Bio.Seq import Seq
 from fastapi.testclient import TestClient
 
 client = TestClient(app)
@@ -68,4 +69,15 @@ def test_example_file_predictions():
         expected = r["id"].split("_")[0]
         assert r["prediction"]["label"] == expected
         assert sum(r["prediction"]["probabilities"].values()) == pytest.approx(1, abs=1e-3)
-        assert len(r["kmer_profile"]) == 256
+        assert 0 <= r["coding_density"] <= 1
+
+
+def test_find_orfs_both_strands():
+    orf = "ATG" + "GCT" * 110 + "TAA"  # 336 bp incl. stop codon
+    filler = "C" * 100
+    seq = filler + orf + filler + str(Seq(orf).reverse_complement()) + filler  # 972 bp
+    orfs, density = find_orfs(seq)
+    # reverse-strand frames count from the 3' end: 972 - 872 = 100 bases → offset 1 → frame -2
+    assert [(o.start, o.end, o.frame) for o in orfs] == [(101, 436, 2), (537, 872, -2)]
+    assert density == pytest.approx(2 * 336 / len(seq), abs=1e-4)
+    assert find_orfs("ATG" + "GCT" * 50 + "TAA") == ([], 0.0)  # below the 300 bp minimum

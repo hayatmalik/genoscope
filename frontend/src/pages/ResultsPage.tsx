@@ -4,7 +4,7 @@ import { useState } from 'react'
 import type { AnalyzeResponse } from '../api/client'
 import BaseCompositionCard from '../components/BaseCompositionCard'
 import GCPlot from '../components/GCPlot'
-import KmerChart from '../components/KmerChart'
+import OrfMap from '../components/OrfMap'
 import PredictionChart from '../components/PredictionChart'
 import RecordsTable from '../components/RecordsTable'
 import SequenceViewer from '../components/SequenceViewer'
@@ -42,7 +42,7 @@ export default function ResultsPage({ result, window, onWindowChange, onReset }:
         <Col xs={24} lg={8}><BaseCompositionCard record={record} /></Col>
         <Col xs={24} lg={16}><GCPlot record={record} window={window} onWindowChange={onWindowChange} /></Col>
         <Col xs={24} lg={8}><PredictionChart record={record} /></Col>
-        <Col xs={24} lg={16}><KmerChart record={record} /></Col>
+        <Col xs={24} lg={16}><OrfMap record={record} /></Col>
       </Row>
     </>
   )

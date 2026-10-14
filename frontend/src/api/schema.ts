@@ -64,6 +64,15 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** ORF */
+        ORF: {
+            /** Start */
+            start: number;
+            /** End */
+            end: number;
+            /** Frame */
+            frame: number;
+        };
         /** Prediction */
         Prediction: {
             /** Label */
@@ -93,10 +102,10 @@ export interface components {
             };
             /** Gc Windows */
             gc_windows: components["schemas"]["GCPoint"][];
-            /** Kmer Profile */
-            kmer_profile: {
-                [key: string]: number;
-            };
+            /** Orfs */
+            orfs: components["schemas"]["ORF"][];
+            /** Coding Density */
+            coding_density: number;
             prediction: components["schemas"]["Prediction"] | null;
             /** Warning */
             warning?: string | null;

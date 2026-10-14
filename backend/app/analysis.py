@@ -1,20 +1,25 @@
 import os
+import re
 from collections import Counter
 from functools import cache
 from pathlib import Path
 
 import joblib
+import numpy as np
+import orfipy_core
 import pandas as pd
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import gc_fraction
 from sklearn.pipeline import Pipeline
 
-from .schemas import GCPoint, Prediction, RecordResult
+from .schemas import ORF, GCPoint, Prediction, RecordResult
 
 MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).parents[2] / "ml/models/classifier.joblib"))
 FRAGMENT_LEN = 1500  # length of the training fragments
 MIN_LEN = 1000
 MAX_GC_POINTS = 1000
+MIN_ORF_LEN = 300  # bp (100 codons) before the stop codon; shorter ORFs are common by chance
+ORF_FRAME = re.compile(r"ORF_frame=(-?\d)")  # orfipy reports the frame inside its description string
 
 
 @cache
@@ -46,15 +51,23 @@ def predict(seq: str) -> Prediction | None:
     )
 
 
-def kmer_profile(seq: str) -> dict[str, float]:
-    kmers = model()[:2]  # CountVectorizer + L1 Normalizer from the trained pipeline
-    freqs = kmers.transform([seq]).toarray()[0]
-    return {k: round(float(f), 5) for k, f in zip(kmers[0].get_feature_names_out(), freqs, strict=True)}
+def find_orfs(seq: str) -> tuple[list[ORF], float]:
+    """ATG→stop ORFs ≥ MIN_ORF_LEN in all six frames (longest per stop codon), plus the fraction of the
+    sequence covered by at least one of them (coding density)."""
+    hits = orfipy_core.orfs(
+        seq, minlen=MIN_ORF_LEN, maxlen=max(len(seq), MIN_ORF_LEN), starts=["ATG"], strand="b", include_stop=True
+    )
+    covered = np.zeros(len(seq), dtype=bool)
+    for start, end, *_ in hits:
+        covered[start:end] = True
+    orfs = [ORF(start=s + 1, end=e, frame=int(ORF_FRAME.search(desc)[1])) for s, e, _, desc in hits]
+    return orfs, round(float(covered.mean()), 4) if len(seq) else 0.0
 
 
 def analyze_record(record: SeqRecord, window: int) -> RecordResult:
     seq = str(record.seq).upper()
     prediction = predict(seq)
+    orfs, coding_density = find_orfs(seq)
     return RecordResult(
         id=record.id,
         description=record.description,
@@ -63,7 +76,8 @@ def analyze_record(record: SeqRecord, window: int) -> RecordResult:
         gc_content=round(gc_fraction(seq, ambiguous="ignore"), 4),
         base_counts=dict(Counter(seq).most_common()),
         gc_windows=gc_windows(seq, min(window, len(seq))),
-        kmer_profile=kmer_profile(seq),
+        orfs=orfs,
+        coding_density=coding_density,
         prediction=prediction,
         warning=None if prediction else f"Sequence shorter than {MIN_LEN} bp; no prediction made.",
     )
