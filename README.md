@@ -9,6 +9,8 @@ Viruses). A sortable table lists every record
 
 **Stack:** FastAPI · Biopython · pandas · scikit-learn · React · Ant Design · @ant-design/plots · TanStack Query · Docker
 
+How each part was built is described in [DOCUMENTATION.md](DOCUMENTATION.md).
+
 ## Quick start
 
 ```bash
